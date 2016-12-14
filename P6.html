@@ -1,0 +1,181 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  
+  <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <script src="/d3-geomap/vendor/d3.geomap.dependencies.min.js"></script>
+        <script src="/d3-geomap/js/d3.geomap.min.js"></script>
+    <style>
+    </style>
+    <script type="text/javascript">  
+      function draw(geo_data) {
+        "use strict";
+        var margin = 75,
+            width = 1400 - margin,
+            height = 600 - margin;
+          
+          //debugger;
+          
+          var color_domain = [10,50, 100, 300, 500, 1000, 2000,3000, 5000];
+             
+     var color = d3.scale.threshold()
+  .domain(color_domain)
+ .range(["#f7fcfd","#e0ecf4","#bfd3e6","#9ebcda","#8c96c6","#8c6bb1","#88419d","#810f7","#4d004b"]);
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width + margin)
+            .attr("height", height + margin)
+            .append('g')
+            .attr('class', 'map');
+          
+          var projection = d3.geo.mercator()
+                               .scale(150)
+                               .translate( [width / 2, height / 1.5]);
+
+        var path = d3.geo.path().projection(projection);
+
+        var map = svg.selectAll('path')
+                     .data(geo_data.features)
+                     .enter()
+                     .append('path')
+                     .attr('d', path);
+                     
+          
+          function plot_points(data){
+              
+              
+              
+              var medals_by_country=d3.nest()
+              .key(function(d){
+                
+                  return d['NOC'];
+                  
+              })
+              .rollup(function(leaves){
+                  
+                  return  leaves.length ;
+                      
+              })
+              .entries(data);
+              
+              var countries=[];
+              var medals={};
+              
+              medals_by_country.forEach(function(d) {
+                    
+                    countries.push(d.key);
+                    medals[d.key]=d.values;
+                });
+              
+              //debugger;
+              
+              var color_assignments={};
+              
+              var len=medals.length;
+              
+              for(var country in medals)
+                  {    
+                      color_assignments[country]=color(medals[country]);
+                      
+                      
+                  }
+              
+              //debugger;
+              var country_code={
+                  
+                 
+              };      
+              d3.csv("country_code.csv",function(data){
+                  
+                  
+                      
+                      data.forEach(function(d) {
+                     
+                     
+                    console.log(d.Country,"  ",d.code);
+                          var country=d.Country;
+                          
+                    if(country.indexOf("*")>0){
+                        country.replace("*","");
+                        
+                    } 
+                          
+                     
+                     country_code[d.Country]=d.code;
+                      
+                           
+                  });
+                 
+                     
+                     debugger;
+                  
+                  console.log(country_code);
+                     
+                     
+                 
+              });
+              
+             debugger;
+              svg.selectAll('path').style('fill',function(d){
+                  //debugger;
+                  var country=d.properties.name;
+                  
+                  //var code_1=d.properties.id;
+                  var code=country_code[country];
+                  
+                  var color_picked;
+                  
+                  if (countries.indexOf(code)<0 &&countries.indexOf(country)<0){
+                      
+                     color_picked= "yellow";
+                  }
+                  
+                  else if(countries.indexOf(code)>=0) {
+                      
+                      console.log(country," ",code," ", color_assignments[code]);
+                  
+                      color_picked= color_assignments[code];}
+                   else if (countries.indexOf(country)>=0) {
+                          color_picked= color_assignments[country];
+                      }
+                  console.log(country," has color ",color_picked);
+                  return color_picked;
+                  });
+                  
+                  
+                  
+             
+                  
+              
+              
+          
+          
+          var format=d3.time.format("%Y")
+          d3.csv("all_medalists.csv",function(d){
+              
+             d['Edition']=+d["Edition"]
+              
+              return d;
+          }, plot_points);
+          
+          
+          
+      }; 
+          
+      }
+      
+      </script>
+  </head>
+<body>
+  <script type="text/javascript">
+  /*
+    Use D3 to load the GeoJSON file
+    */
+    
+d3.json("world_countries.json", draw);
+  </script>
+</body>
+</html>
