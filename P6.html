@@ -84,52 +84,26 @@
                   }
               
               //debugger;
-              var country_code={
-                  
                  
-              };      
-              d3.csv("country_code.csv",function(data){
-                  
-                  
-                      
-                      data.forEach(function(d) {
-                     
-                     
-                    console.log(d.Country,"  ",d.code);
-                          var country=d.Country;
-                          
-                    if(country.indexOf("*")>0){
-                        country.replace("*","");
-                        
-                    } 
-                          
-                     
-                     country_code[d.Country]=d.code;
-                      
-                           
-                  });
-                 
-                     
-                     debugger;
-                  
-                  console.log(country_code);
-                     
-                     
-                 
-              });
               
              debugger;
+              countries.forEach(function(d){
+                  console.log(d);
+              });
+              console.log(countries.indexOf("TZA"));
+              console.log(countries.indexOf("BEN"));
               svg.selectAll('path').style('fill',function(d){
                   //debugger;
                   var country=d.properties.name;
                   
                   //var code_1=d.properties.id;
-                  var code=country_code[country];
+                  var code=d.id;
                   
+                  console.log(code);
                   var color_picked;
                   
                   if (countries.indexOf(code)<0 &&countries.indexOf(country)<0){
-                      
+                      console.log("Here we find a country that has no record ",code);
                      color_picked= "yellow";
                   }
                   
@@ -141,29 +115,23 @@
                    else if (countries.indexOf(country)>=0) {
                           color_picked= color_assignments[country];
                       }
-                  console.log(country," has color ",color_picked);
+                  //console.log(country," has color ",color_picked);
                   return color_picked;
-                  });
-                  
-                  
-                  
-             
-                  
-              
-              
+                  })
+              .style('stroke', 'black')
+              .style('stroke-width', 1.2);;
+                
+                     
+      }; 
           
           
-          var format=d3.time.format("%Y")
+          
           d3.csv("all_medalists.csv",function(d){
               
              d['Edition']=+d["Edition"]
               
               return d;
           }, plot_points);
-          
-          
-          
-      }; 
           
       }
       
