@@ -39,3 +39,17 @@ Some samples are as follows:
 - Howe St. Vancouver (Howe Street)
 - Granville St #216 (Granville Street)
 - Broadway W (West Broadway)
+
+To deal with such inconsistency, I first printed out all the street types that are not in expected (a set that contains all expected street types ["Street", "Avenue", "Boulevard", "Drive", "Court", "Place", "Square", "Lane", "Road", "Trail", "Parkway", "Commons"]). It turned out there are many street types that are not in the set. Some such samples are listed as follows:
+- Sennok Crescent
+- Grant McConachie Way
+- Kingsway
+- West Mall
+- Greer Venue
+- Health Sciences Mall
+- West Broadway
+- Foreshore Walk
+- Railspur Alley
+- Lougheed Highway
+
+Since these street names comply our expectations, I decided to keep them as they were. 
