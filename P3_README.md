@@ -52,4 +52,71 @@ To deal with such inconsistency, I first printed out all the street types that a
 - Railspur Alley
 - Lougheed Highway
 
-Since these street names comply our expectations, I decided to keep them as they were. 
+Since these street names comply our expectations, I decided to keep them as they were. As I mentioned above, the inconsistent street names were inconsistent with our expected form in various ways. Therefore, I dealt with them separately in my update_street_name function:
+
+```
+def update_street_name(name, mapping):
+    better_name=""
+    
+    # remove "#"
+    if "#" in name:
+        
+        
+        name=name.rsplit("#",1)[0][:-1]
+	
+     # change Broughton into Broughton Street   
+    elif name=="Broughton":
+        # A street name is missing "street"
+        name="Broughton Street"
+    elif "Steet" in name:
+        # A spelling mistake
+        name=name.replace("Steet","Street")
+    elif "Mall" in name:
+        name=name
+    elif "South" in name:
+        name=name
+	#Keep Broadway
+    elif "Broadway" in name:
+        name=name
+	#Change Denmanstreet into Denman Street
+    elif name=="Denmanstreet":
+        name="Denman Street"
+    elif " " in name:
+       # Vancouver is in street name
+        if name.split(" ")[-1]=="Vancouver":
+            name=name.rsplit(" ",1)[0]
+            
+        elif name.split(" ")[1]=="2nd":
+            name=name+" Avenue"
+     	    
+    if name.endswith("W"): # name ends with W
+        name="West "+name.rsplit(" ",1)[0]
+    elif name.endswith("E"):  #ends with E
+        name="East "+name.rsplit(" ",1)[0]
+	#starts with W
+    if name.startswith("W ") or name.startswith("W. "):
+        name="West "+name.rsplit(" ",1)[1]
+	#starts with E
+    elif name.startswith("E ") or name.startswith("E. "):
+        name="East "+name.rsplit(" ",1)[1]
+	#Change Jervis into Jervis Street
+    if name=="Jervis":
+        name=name+ " Street"
+	
+	
+    # if the street name ends with one of the keys in the mapping
+    if name[-3:] in mapping.keys(): 
+        better_name=mapping[name[-3:]]
+        name=name[:-3]+better_name
+    # if the street name ends with one of the keys in the mapping
+    elif name[-2:] in mapping.keys():
+        better_name=mapping[name[-2:]]
+        name=name[:-2]+better_name
+    elif name.endswith("East"): #put "East" at the beginning of the street names
+        name="East "+name.rsplit(" ",1)[0] 
+    elif name.endswith("West"):
+        name="West "+name.rsplit(" ",1)[0]
+
+    return name
+
+```
