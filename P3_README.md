@@ -25,7 +25,17 @@ After spending time looking at a small sample size of the Vancouver area, I noti
 		<tag k="addr:postcode" v="V6T1Z3"/>
 		<tag k="addr:province" v="BC"/>
 		<tag k="addr:housenumber" v="6190"/>
-		
-		
 		</node>
 ```
+
+### Inconsistent street names
+When wrangling with street names, I noticed that the street names in the "addr:street" tag of the osm file were inconsistent with our standard form.
+Some samples are as follows:
+- East 2nd (East 2nd Avenue)
+- Denmanstreet (Denman Street)
+- Shaughnessy St (Shaughnessy Street)
+- E. Broadway (East Broadway)
+- Boundary Rd.(Boundary Road)
+- Howe St. Vancouver (Howe Street)
+- Granville St #216 (Granville Street)
+- Broadway W (West Broadway)
