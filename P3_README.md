@@ -120,3 +120,28 @@ def update_street_name(name, mapping):
     return name
 
 ```
+
+### Missing "amenity:school" tags
+
+As mentioned in section Problems Encountered in the Map, several schools in the dataset have "schools" in their names, but they are missing "amenity:school" tags which are normally included for other schools. To deal with this, I decided to add "amenity:school" tags to such schools. I added the following code to add such tags:
+
+```
+ found_school=False
+            # add "amenity:school" tags if it's missing from schools
+            for i in range(len(tags)):
+                tag_set.add(tags[i]["key"])
+                if "name" in tags[i]["key"] and "School" in tags[i]["value"]:
+                            
+                    found_school=True
+            if "amenity" not in tag_set and found_school:
+                
+                        
+                new_tag={}
+                new_tag["key"]="amenity"
+                new_tag["value"]="school"
+                new_tag["type"]="regular"
+                new_tag["id"]=tags[0]["id"]
+                tags.append(new_tag)
+		
+```
+
