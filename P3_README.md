@@ -130,12 +130,9 @@ As mentioned in section Problems Encountered in the Map, several schools in the 
             # add "amenity:school" tags if it's missing from schools
             for i in range(len(tags)):
                 tag_set.add(tags[i]["key"])
-                if "name" in tags[i]["key"] and "School" in tags[i]["value"]:
-                            
+                if "name" in tags[i]["key"] and "School" in tags[i]["value"]:  
                     found_school=True
-            if "amenity" not in tag_set and found_school:
-                
-                        
+            if "amenity" not in tag_set and found_school:      
                 new_tag={}
                 new_tag["key"]="amenity"
                 new_tag["value"]="school"
@@ -144,4 +141,81 @@ As mentioned in section Problems Encountered in the Map, several schools in the 
                 tags.append(new_tag)
 		
 ```
+
+## Query result by count, descending
+
+### Top 10 appearing amenities:
+```
+sqlite> select value, count(*) as num 
+from nodes_tags 
+where key="amenity" 
+group by value order by num 
+desc limit 10;
+```
+
+The query result is:
+
+```
+bench,711
+restaurant,676
+bicycle_parking,385
+cafe,375
+fast_food,318
+post_box,225
+bank,131
+toilets,98
+bicycle_rental,90
+drinking_water,83
+```
+### Top 10 appearing postcodes:
+
+```
+select value, count(value) 
+from( select * from  nodes_tags union all select * from ways_tags)  
+where type="addr" and key="postcode" 
+group by value 
+order by count(value) 
+desc limit 10;
+```
+The query result is:
+
+```
+"V6S 0A9",24
+V7L2A4,19
+"V5M 0C4",9
+"V5R 5K6",8
+"V5V 3A4",7
+"V5R 5G9",6
+"V5Y 1R4",6
+V6M1V1,6
+V6M3A5,6
+"V6T 1Z4”,6
+```
+
+### Top 10 Appearing Street names
+
+```
+select value, count(value) 
+from( select * from  nodes_tags union all select * from ways_tags)  
+where type="addr" and key="street" 
+group by value 
+order by count(value) 
+desc limit 10;
+```
+
+The query result is: 
+```
+"West 4th Avenue",233
+"Granville Street",229
+"Davie Street",221
+"East 4th Street",206
+"East 5th Street",176
+"West Hastings Street",163
+"West Broadway",159
+"East 6th Street",154
+"Richards Street",154
+"Homer Street",144
+```
+
+
 
