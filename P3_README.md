@@ -146,7 +146,7 @@ As mentioned in section Problems Encountered in the Map, several schools in the 
 
 ### Top 10 appearing amenities:
 ```
-sqlite> select value, count(*) as num 
+select value, count(*) as num 
 from nodes_tags 
 where key="amenity" 
 group by value order by num 
@@ -180,16 +180,16 @@ desc limit 10;
 The query result is:
 
 ```
-"V6S 0A9",24
-V7L2A4,19
-"V5M 0C4",9
-"V5R 5K6",8
-"V5V 3A4",7
-"V5R 5G9",6
-"V5Y 1R4",6
-V6M1V1,6
-V6M3A5,6
-"V6T 1Z4”,6
+"V6S 0A9",72
+V7L2A4,38
+"V5M 0C4",26
+"V5V 3A4",21
+V6M1V1,18
+V6M3A5,18
+"V5R 5K6",17
+"V6A 3T8",15
+"V5R 5G9",14
+"V6T 1Z4",14
 ```
 
 ### Top 10 Appearing Street names
@@ -205,17 +205,88 @@ desc limit 10;
 
 The query result is: 
 ```
-"West 4th Avenue",233
-"Granville Street",229
-"Davie Street",221
-"East 4th Street",206
-"East 5th Street",176
-"West Hastings Street",163
-"West Broadway",159
-"East 6th Street",154
-"Richards Street",154
-"Homer Street",144
+"East 4th Avenue",637
+"West 4th Avenue",611
+"East 5th Avenue",556
+"Granville Street",499
+"Davie Street",469
+"East 6th Avenue",467
+"East Keith Road",417
+"East 3rd Avenue",368
+"West Hastings Street",368
+"Richards Street",331
 ```
 
+### Top 10 contributing users
+```
+SELECT e.user, COUNT(*) as num
+   ...> FROM (SELECT user FROM nodes UNION ALL SELECT user FROM ways) e
+   ...> GROUP BY e.user
+   ...> ORDER BY num DESC
+   ...> LIMIT 10;
+   
+``` 
+Query result:
+```
+keithonearth,656650
+michael_moovelmaps,250738
+still-a-worm,215433
+treeniti2,164891
+pdunn,88081
+muratc3,81614
+WBSKI,66345
+rbrtwhite,47412
+Siegbaert,47070
+pnorman,43319
+```
 
+Top 20 popular cuisine
 
+```
+SELECT nodes_tags.value, COUNT(*) as num
+   ...> FROM nodes_tags 
+   ...>     JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='restaurant') i
+   ...>     ON nodes_tags.id=i.id
+   ...> WHERE nodes_tags.key='cuisine'
+   ...> GROUP BY nodes_tags.value
+   ...> ORDER BY num DESC limit 20;
+   
+ ```
+ Query result:
+``` 
+japanese,100
+chinese,88
+sushi,62
+vietnamese,40
+italian,28
+pizza,28
+indian,26
+mexican,22
+asian,20
+burger,18
+greek,18
+thai,18
+american,16
+malaysian,16
+regional,16
+french,14
+breakfast,12
+international,10
+seafood,10
+sandwich,8
+```
+Religion
+```
+SELECT nodes_tags.value, COUNT(*) as num
+   ...> FROM nodes_tags 
+   ...>     JOIN (SELECT DISTINCT(id) FROM nodes_tags WHERE value='place_of_worship') i
+   ...>     ON nodes_tags.id=i.id
+   ...> WHERE nodes_tags.key='religion'
+   ...> GROUP BY nodes_tags.value
+   ...> ORDER BY num DESC;
+ ```
+ Query result:
+``` 
+christian,36
+buddhist,2
+```
